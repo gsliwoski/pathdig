@@ -1,0 +1,43 @@
+[11/01/2018 03:54:06 PM]INFO:Started dCC v0.1
+[11/01/2018 03:54:06 PM]INFO:Arguments are: min_maf=0.0001, min_residues=100, overwrite=False, log=1, min_benign_variants=3, max_resolution=2.5, debug=False, max_residues=450, benign_maf=0.05, min_pathogenic_variants=3
+[11/01/2018 03:54:06 PM]INFO:Created new directory 'dCC_out2/' to save all outputs.
+[11/01/2018 03:54:06 PM]INFO:Start collecting structure chains with 'SELECT Chain.structid, Chain.chain, Chain.unp, Chain.gene, Chain.offset, Chain.hybrid, Structure.resolution, CHAR_LENGTH(Chain.sequence) AS seq_length FROM pdbmap_v13.Chain INNER JOIN Structure ON Chain.structid = Structure.pdbid WHERE Chain.biounit = 0 AND Chain.model = 0 AND Chain.label = 'pdb' AND CHAR_LENGTH(Chain.sequence) BETWEEN 100 AND 450 AND resolution BETWEEN 0 AND 2.5 ORDER BY Chain.unp , resolution;'
+[11/01/2018 03:54:08 PM]INFO:Query returned 32174 structure chains.
+[11/01/2018 03:54:08 PM]INFO:All information on chains is written to structChains.csv
+[11/01/2018 03:54:08 PM]INFO:Start collecting gnomad variants with 'SELECT GCI.label, GCI.structid, GCI.uniprot, GCI.chain, GCI.seqid, GCI.ref_amino_acid, GCI.alt_amino_acid, GD.maf FROM (SELECT GC.label, GI.structid, GI.chain, GC.name, GC.uniprot, GI.seqid, GC.ref_amino_acid, GC.alt_amino_acid, GC.start, GC.end, GC.chr FROM (SELECT * FROM pdbmap_v13.GenomicIntersection WHERE structid = 'structid' AND dlabel = 'gnomad' AND slabel = 'pdb' AND chain = 'chain') AS GI INNER JOIN GenomicConsequence AS GC ON GI.gc_id = GC.gc_id WHERE GC.consequence LIKE '%missense_variant%') AS GCI INNER JOIN GenomicData AS GD ON GD.label = GCI.label AND GCI.chr = GD.chr AND GCI.start = GD.start AND GCI.end = GD.end AND GCI.name = GD.name WHERE GD.maf >= 0.0001;'
+[11/01/2018 03:54:28 PM]INFO:Processed 10% of chains.
+[11/01/2018 03:54:51 PM]INFO:Processed 20% of chains.
+[11/01/2018 03:55:12 PM]INFO:Processed 30% of chains.
+[11/01/2018 03:55:34 PM]INFO:Processed 40% of chains.
+[11/01/2018 03:55:54 PM]INFO:Processed 50% of chains.
+[11/01/2018 03:56:14 PM]INFO:Processed 60% of chains.
+[11/01/2018 03:56:36 PM]INFO:Processed 70% of chains.
+[11/01/2018 03:56:55 PM]INFO:Processed 80% of chains.
+[11/01/2018 03:57:16 PM]INFO:Processed 90% of chains.
+[11/01/2018 03:57:38 PM]INFO:Finished collecting gnomad variants for 32174 chains. Collected 126746 gnomads.
+[11/01/2018 03:57:38 PM]INFO:Start collecting clinvar variants with 'SELECT GC.label, GI.structid, GC.uniprot, GI.chain, GI.seqid, GC.ref_amino_acid, GC.alt_amino_acid FROM (SELECT * FROM pdbmap_v13.GenomicIntersection WHERE structid = 'structid' AND dlabel = 'clinvar' AND slabel = 'pdb' AND chain = 'chain') AS GI INNER JOIN GenomicConsequence AS GC ON GI.gc_id = GC.gc_id WHERE GC.consequence LIKE '%missense_variant%';'
+[11/01/2018 03:57:46 PM]INFO:Processed 10% of chains.
+[11/01/2018 03:57:54 PM]INFO:Processed 20% of chains.
+[11/01/2018 03:58:02 PM]INFO:Processed 30% of chains.
+[11/01/2018 03:58:10 PM]INFO:Processed 40% of chains.
+[11/01/2018 03:58:17 PM]INFO:Processed 50% of chains.
+[11/01/2018 03:58:25 PM]INFO:Processed 60% of chains.
+[11/01/2018 03:58:33 PM]INFO:Processed 70% of chains.
+[11/01/2018 03:58:40 PM]INFO:Processed 80% of chains.
+[11/01/2018 03:58:49 PM]INFO:Processed 90% of chains.
+[11/01/2018 03:58:57 PM]INFO:Finished collecting clinvar variants for 32174 chains. Collected 339756 clinvars.
+[11/01/2018 03:58:57 PM]INFO:Start checking for overlapping variants.
+[11/01/2018 03:58:59 PM]INFO:Found 13842 overlapping variants.
+[11/01/2018 03:58:59 PM]INFO:Start preparing final data output.
+[11/01/2018 03:58:59 PM]WARNING:Doubled chainIDs! 3ZGOC is only save once.
+[11/01/2018 03:58:59 PM]WARNING:Doubled chainIDs! 3ZGOB is only save once.
+[11/01/2018 03:58:59 PM]WARNING:Doubled chainIDs! 3ZGOA is only save once.
+[11/01/2018 03:58:59 PM]WARNING:Doubled chainIDs! 1J8FC is only save once.
+[11/01/2018 03:58:59 PM]WARNING:Doubled chainIDs! 1J8FB is only save once.
+[11/01/2018 03:58:59 PM]WARNING:Doubled chainIDs! 1J8FA is only save once.
+[11/01/2018 03:59:00 PM]INFO:Finished preparing with 18538 structid and 32168 chains left. Out of 339756/126886 clinvar/gnomad variants 327635/113980 remain and 12121/12906 are filtered.
+[11/01/2018 03:59:00 PM]INFO:Start filter for minimum amount of variants.
+[11/01/2018 03:59:01 PM]INFO:Done filtering. Out of 32168/327635/113980 Chains/Clinvars/Gnomads 2875/177363/15232 remain and 29293/150272/98748 are filtered.
+[11/01/2018 03:59:01 PM]INFO:1593 structs and 229 uniprots are still present.
+[11/01/2018 03:59:01 PM]INFO:616 structs and 134 uniprots are in a conflict.
+[11/01/2018 03:59:02 PM]INFO:Finished program run.
