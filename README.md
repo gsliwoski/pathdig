@@ -1,15 +1,15 @@
 Paul's datasets:
 
 1. ddG monomer 
-* I did not rerun these calculations but copied them over into ddGprep_out0. The only thing that is required from here are the pdb structures used in other scripts. = /dors/capra_lab/users/sliwosgr/pathdig/ddGprep_out0
+* I did not rerun these calculations but copied them over into ddGprep_out0. The only thing that is required from here are the pdb structures used in other scripts. = `/dors/capra_lab/users/sliwosgr/pathdig/ddGprep_out0`
 2. pathprox
 * I identified potentially what was causing issues in Paul's original pathprox analysis (see below)
 * I refactored his pathprox scripts and so to set up all the scripts and SLURM files, I run
 
-python3 pathproxPrepper_gs.py /dors/capra_lab/users/sliwosgr/pathdig/ddGprep_out0/ /dors/capra_lab/users/sliwosgr/pathdig/variants/resultUnique.csv PP_run
+`python3 pathproxPrepper_gs.py /dors/capra_lab/users/sliwosgr/pathdig/ddGprep_out0/ /dors/capra_lab/users/sliwosgr/pathdig/variants/resultUnique.csv PP_run`
 
 * This generates a directory called PP_run containing all necessary files.
-* I then submit PP_run/pathprox.slurm as a batch array with the number of structures in the array
+* I then submit `PP_run/pathprox.slurm` as a batch array with the number of structures in the array
 * Then run `pathproxCollector.py ddGscores.csv PP_run` to generate a summary of the pathprox runs once they complete.
 * ddGscores.csv is the output from Paul's ddG collector and the pathprox scores are attached to these rows per variant.
 * By default, this creates a file called scoredVariants.csv whre two additional columns have been added: 'variantID' and 'pathprox'
@@ -42,7 +42,7 @@ What I currently think happened:
 1. Paul defined variants in terms to seqid position (as in the position on the transcript/uniprot)
 2. Paul defines fasta sequence initially in terms of cleaned PDB fasta sequence
 2ex: structid = 1A4Y, chain = B, variant = C39W
-/dors/capra_lab/users/eisenhp/pathproxPrep/1A4Y/C39W_out
+`/dors/capra_lab/users/eisenhp/pathproxPrep/1A4Y/C39W_out`
 In this case, the seqid = 39 and the clean_pos = 39
 3. Paul grabs the raw PDB file.
 4. Paul has problems because the cleaned pdb fasta may be missing residues that were removed because they were missing backbone atoms or any other potential changes to the number of residues in the structure. It may have been that one of the variants fell on a residue in the raw PDB fasta that was lost during the cleaning to the cleaned fasta. This would cause errors when attempting to convert numbering.
